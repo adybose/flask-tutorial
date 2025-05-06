@@ -32,7 +32,20 @@ def show_subpath(subpath):
 
 @app.route('/dashboard/')
 def render_dashboard():
-    return render_template('dashboard.html', name="dashboard")
+
+    user = {
+        'username': 'John Doe',
+        'email': 'jd@mail.com',
+        'city': 'New York',
+        'country': 'USA',
+    }
+    notifications = [
+        {'message': 'New message from Alice', 'time': '2 hours ago'},
+        {'message': 'Your order has been shipped', 'time': '1 day ago'},
+        {'message': 'New comment on your post', 'time': '3 days ago'},
+    ]
+    
+    return render_template('dashboard.html', user=user, notifications=notifications)
 
 
 

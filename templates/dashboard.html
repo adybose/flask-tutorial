@@ -6,9 +6,15 @@
 <body>
     <h1>Dashboard Page</h1>
     <p>Welcome to the dashboard!</p>
-    <!-- <ul>
-        <li><a href="/users">Users</a></li>
-        <li><a href="/settings">Settings</a></li>
-        <li><a href="/logout">Logout</a></li>
-    </ul> -->
+    <p>Username: {{user.username}}</p>
+    <p>Email: {{user.email}}</p>
+    <p>City: {{user.city}}</p>
+    <p>Country: {{user.country}}</p>
+
+    <h2>Notifications</h2>
+    <ul>
+        {% for notification in notifications %}
+            <li>{{ notification }}</li>
+        {% endfor %}
+    </ul>
 </body>
