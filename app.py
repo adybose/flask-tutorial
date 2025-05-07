@@ -1,5 +1,14 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from markupsafe import escape
+
+import sqlite3
+
+# Create a SQLite database connection
+connect = sqlite3.connect('database.db')
+connect.execute(
+    'CREATE TABLE IF NOT EXISTS USERS (name TEXT, \
+    email TEXT, city TEXT, country TEXT, phone TEXT)'
+)
 
 
 app = Flask(__name__)
@@ -47,6 +56,37 @@ def render_dashboard():
     
     return render_template('dashboard.html', user=user, notifications=notifications)
 
+
+@app.route('/index/')
+def index():
+    return render_template('index.html')
+
+@app.route('/adduser', methods=['GET', 'POST'])
+def adduser():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        city = request.form['city']
+        country = request.form['country']
+        phone = request.form['phone']
+        with sqlite3.connect("database.db") as users:
+            cursor = users.cursor()
+            cursor.execute("INSERT INTO USERS \
+            (name,email,city,country,phone) VALUES (?,?,?,?,?)",
+                           (name, email, city, country, phone))
+            users.commit()
+        return render_template("index.html")
+    else:
+        return render_template('adduser.html')
+
+@app.route('/users')
+def participants():
+    connect = sqlite3.connect('database.db')
+    cursor = connect.cursor()
+    cursor.execute('SELECT * FROM USERS')
+
+    data = cursor.fetchall()
+    return render_template("users.html", data=data)
 
 
 if __name__ == '__main__':
